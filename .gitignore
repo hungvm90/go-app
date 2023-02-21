@@ -1,0 +1,10 @@
+.idea
+*.log
+.DS_Store
+
+.vscode/
+venv
+report.html
+log.html
+output.xml
+coverage.out
