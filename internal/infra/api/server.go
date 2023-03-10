@@ -79,3 +79,15 @@ func setUpLoggerMiddleware(e *echo.Echo) {
 	}
 	e.Use(middleware.LoggerWithConfig(logConfig))
 }
+
+func createRequestContext(c echo.Context) internal.RequestContext {
+	requestId := ""
+	temp := c.Get("requestId")
+	if temp == nil {
+		requestId = uuid.New().String()
+	} else {
+		requestId = temp.(string)
+	}
+	logger := log.With().Str("requestId", requestId).Logger()
+	return internal.RequestContext{Logger: &logger, Context: c.Request().Context()}
+}

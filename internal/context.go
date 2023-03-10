@@ -2,7 +2,7 @@ package internal
 
 import (
 	"context"
-	"log"
+	"github.com/rs/zerolog"
 	"sync"
 )
 
@@ -12,6 +12,6 @@ type AppContext struct {
 }
 
 type RequestContext struct {
-	Logger *log.Logger
+	Logger *zerolog.Logger
 	context.Context
 }
