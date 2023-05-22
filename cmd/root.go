@@ -8,12 +8,14 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
+	"io"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var cfgFile string
@@ -74,7 +76,20 @@ func initConfig() {
 
 func setupLogger() {
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
-	logger := zerolog.New(os.Stdout).With().Timestamp().Caller().Logger().Level(zerolog.InfoLevel)
+	var writers []io.Writer
+	writers = append(writers, os.Stdout)
+	if appConfig.LogToFile {
+		file := &lumberjack.Logger{
+			Filename:   "runtime.log",
+			MaxSize:    50, // megabytes
+			MaxBackups: 10,
+			MaxAge:     30,   //days
+			Compress:   true, // disabled by default
+		}
+		writers = append(writers, file)
+	}
+	mw := io.MultiWriter(writers...)
+	logger := zerolog.New(mw).With().Timestamp().Caller().Logger().Level(zerolog.InfoLevel)
 	zerolog.TimeFieldFormat = time.RFC3339Nano
 	if appConfig.Debug {
 		logger = logger.Level(zerolog.DebugLevel)

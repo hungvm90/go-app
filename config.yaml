@@ -2,3 +2,4 @@ version: 1.1.1
 port: 8080
 env: dev
 debug: true
+logToFile: true

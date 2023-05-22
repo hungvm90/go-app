@@ -8,6 +8,7 @@ require (
 	github.com/rs/zerolog v1.29.1
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (
